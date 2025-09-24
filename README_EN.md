@@ -50,8 +50,7 @@ uv run src/main.py
 docker build -t vocechat-chatbot .
 
 # Run container
-docker run --name vocechat-chatbot -p 4800:5000 -v /vol1/1000/docker/vocechat-ch
-atbot/config.yaml:/app/config.yaml -v /etc/localtime:/etc/localtime vocechat-chatbot:latest
+docker run --name vocechat-chatbot -p 5000:5000 -v ~/config.yaml:/app/config.yaml -v /etc/localtime:/etc/localtime vocechat-chatbot:latest
 ```
 
 ## Configuration Description
