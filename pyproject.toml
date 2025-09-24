@@ -1,0 +1,16 @@
+[project]
+name = "vocechat-chatbot-python"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "apscheduler>=3.11.0",
+    "flask>=3.1.2",
+    "markdown>=3.9",
+    "openai>=1.107.2",
+    "pyinstaller>=6.16.0",
+    "pyjwt>=2.10.1",
+    "requests>=2.32.5",
+    "ruamel-yaml>=0.18.15",
+]

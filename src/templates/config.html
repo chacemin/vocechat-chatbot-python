@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>配置管理</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="password"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+        .section-title {
+            margin-top: 0;
+            color: #007bff;
+        }
+        .success-message {
+            color: green;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .error-message {
+            color: red;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .hidden {
+            display: none;
+        }
+        .login-form {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+        }
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .login-form input[type="text"], .login-form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <div id="loginSection" class="login-form" style="display: none;">
+            <h2>登录配置页面</h2>
+            <div id="loginMessage"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="login_user">用户名</label>
+                    <input type="text" id="login_user" name="login_user" required>
+                </div>
+                <div class="form-group">
+                    <label for="login_password">密码</label>
+                    <input type="password" id="login_password" name="login_password" required>
+                </div>
+                <button type="submit">登录</button>
+            </form>
+        </div>
+
+        <div id="configSection" class="hidden">
+            <h1>配置管理页面</h1>
+            <div id="message"></div>
+            <div id="logoutSection" style="text-align: right; margin-bottom: 15px;">
+                <button type="button" id="logoutBtn">退出登录</button>
+            </div>
+            <form id="configForm">
+                <!-- 端口配置 -->
+                <div class="section">
+                    <h2 class="section-title">端口配置</h2>
+                    <div class="form-group">
+                        <label for="port">端口</label>
+                        <input type="number" id="port" name="port" required>
+                    </div>
+                </div>
+
+                <!-- Web管理页面配置 -->
+                <div class="section">
+                    <h2 class="section-title">Web管理页面配置</h2>
+                    <div class="form-group">
+                        <label for="web_user">用户名</label>
+                        <input type="text" id="web_user" name="web_user" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="web_password">密码</label>
+                        <input type="password" id="web_password" name="web_password" required>
+                    </div>
+                </div>
+
+                <!-- 邮件配置 -->
+                <div class="section">
+                    <h2 class="section-title">邮件配置</h2>
+                    <div class="form-group">
+                        <label for="email_status">邮件状态</label>
+                        <select id="email_status" name="email_status">
+                            <option value="true">启用</option>
+                            <option value="false">禁用</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="email_receiver">收件人邮箱</label>
+                        <input type="text" id="email_receiver" name="email_receiver">
+                    </div>
+                    <div class="form-group">
+                        <label for="email_user">发件人邮箱</label>
+                        <input type="text" id="email_user" name="email_user">
+                    </div>
+                    <div class="form-group">
+                        <label for="email_password">邮箱授权密码</label>
+                        <input type="password" id="email_password" name="email_password">
+                    </div>
+                    <div class="form-group">
+                        <label for="email_sender">发件人名称</label>
+                        <input type="text" id="email_sender" name="email_sender">
+                    </div>
+                    <div class="form-group">
+                        <label for="email_title">邮件标题</label>
+                        <input type="text" id="email_title" name="email_title">
+                    </div>
+                    <div class="form-group">
+                        <label for="email_summary">邮件简介</label>
+                        <input type="text" id="email_summary" name="email_summary">
+                    </div>
+                    <div class="form-group">
+                        <label for="email_content">邮件正文</label>
+                        <textarea id="email_content" name="email_content" rows="5"></textarea>
+                    </div>
+                </div>
+
+                <!-- NotifyX配置 -->
+                <div class="section">
+                    <h2 class="section-title">NotifyX配置</h2>
+                    <div class="form-group">
+                        <label for="notifyx_status">NotifyX状态</label>
+                        <select id="notifyx_status" name="notifyx_status">
+                            <option value="true">启用</option>
+                            <option value="false">禁用</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="notifyx_key">API KEY</label>
+                        <input type="text" id="notifyx_key" name="notifyx_key">
+                    </div>
+                    <div class="form-group">
+                        <label for="notifyx_title">通知标题</label>
+                        <input type="text" id="notifyx_title" name="notifyx_title">
+                    </div>
+                    <div class="form-group">
+                        <label for="notifyx_description">通知描述</label>
+                        <input type="text" id="notifyx_description" name="notifyx_description">
+                    </div>
+                    <div class="form-group">
+                        <label for="notifyx_content">通知内容</label>
+                        <textarea id="notifyx_content" name="notifyx_content" rows="5"></textarea>
+                    </div>
+                </div>
+
+                <!-- DeepSeek配置 -->
+                <div class="section">
+                    <h2 class="section-title">DeepSeek配置</h2>
+                    <div class="form-group">
+                        <label for="deepseek_status">DeepSeek状态</label>
+                        <select id="deepseek_status" name="deepseek_status">
+                            <option value="true">启用</option>
+                            <option value="false">禁用</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="deepseek_base_url">基础连接地址</label>
+                        <input type="text" id="deepseek_base_url" name="deepseek_base_url">
+                    </div>
+                    <div class="form-group">
+                        <label for="deepseek_api_key">API Key</label>
+                        <input type="text" id="deepseek_api_key" name="deepseek_api_key">
+                    </div>
+                    <div class="form-group">
+                        <label for="deepseek_model">模型</label>
+                        <input type="text" id="deepseek_model" name="deepseek_model">
+                    </div>
+                </div>
+
+                <!-- Gemini配置 -->
+                <div class="section">
+                    <h2 class="section-title">Gemini配置</h2>
+                    <div class="form-group">
+                        <label for="gemini_status">Gemini状态</label>
+                        <select id="gemini_status" name="gemini_status">
+                            <option value="true">启用</option>
+                            <option value="false">禁用</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="gemini_base_url">基础连接地址</label>
+                        <input type="text" id="gemini_base_url" name="gemini_base_url">
+                    </div>
+                    <div class="form-group">
+                        <label for="gemini_api_key">API Key</label>
+                        <input type="text" id="gemini_api_key" name="gemini_api_key">
+                    </div>
+                    <div class="form-group">
+                        <label for="gemini_model">模型</label>
+                        <input type="text" id="gemini_model" name="gemini_model">
+                    </div>
+                </div>
+
+                <!-- Baidu配置 -->
+                <div class="section">
+                    <h2 class="section-title">Baidu配置</h2>
+                    <div class="form-group">
+                        <label for="baidu_status">Baidu状态</label>
+                        <select id="baidu_status" name="baidu_status">
+                            <option value="true">启用</option>
+                            <option value="false">禁用</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="baidu_base_url">基础连接地址</label>
+                        <input type="text" id="baidu_base_url" name="baidu_base_url">
+                    </div>
+                    <div class="form-group">
+                        <label for="baidu_api_key">API Key</label>
+                        <input type="text" id="baidu_api_key" name="baidu_api_key">
+                    </div>
+                    <div class="form-group">
+                        <label for="baidu_model">模型</label>
+                        <input type="text" id="baidu_model" name="baidu_model">
+                    </div>
+                </div>
+
+                <!-- VoceChat配置 -->
+                <div class="section">
+                    <h2 class="section-title">VoceChat配置</h2>
+                    <div class="form-group">
+                        <label for="vocechat_bot_api_key">机器人API Key</label>
+                        <input type="text" id="vocechat_bot_api_key" name="vocechat_bot_api_key">
+                    </div>
+                    <div class="form-group">
+                        <label for="vocechat_bot_user_id">机器人用户ID</label>
+                        <input type="number" id="vocechat_bot_user_id" name="vocechat_bot_user_id">
+                    </div>
+                    <div class="form-group">
+                        <label for="vocechat_host">VoceChat域名地址</label>
+                        <input type="text" id="vocechat_host" name="vocechat_host">
+                    </div>
+                    <div class="form-group">
+                        <label for="vocechat_target_gid">频道地址</label>
+                        <input type="number" id="vocechat_target_gid" name="vocechat_target_gid">
+                    </div>
+                </div>
+
+                <!-- 定时任务配置 -->
+                <div class="section">
+                    <h2 class="section-title">定时任务配置</h2>
+                    <div id="scheduler-sections">
+                        <!-- 动态添加的定时任务配置项 -->
+                    </div>
+                    <button type="button" id="add-scheduler">添加定时任务</button>
+                </div>
+
+                <button type="submit">保存配置</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载时检查登录状态
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+            setupEventListeners();
+        });
+
+        function checkLoginStatus() {
+            // 检查是否存在token
+            const token = localStorage.getItem('token');
+            if (token) {
+                // 验证token（这里简单检查是否为空）
+                if (token.trim() !== '') {
+                    showConfigSection();
+                    fetchConfig();
+                } else {
+                    showLoginSection();
+                }
+            } else {
+                showLoginSection();
+            }
+        }
+
+        function showLoginSection() {
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('configSection').classList.add('hidden');
+        }
+
+        function showConfigSection() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('configSection').classList.remove('hidden');
+        }
+
+        function setupEventListeners() {
+            // 登录表单提交事件
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            
+            // 退出登录按钮事件
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+            
+            // 添加定时任务按钮
+            document.getElementById('add-scheduler').addEventListener('click', addSchedulerSection);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const login_user = document.getElementById('login_user').value;
+            const login_password = document.getElementById('login_password').value;
+            
+            // 发送登录请求到服务器
+            fetch('/logins', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: login_user,
+                    password: login_password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.token) {
+                    // 登录成功，保存token到localStorage
+                    localStorage.setItem('token', data.token);
+                    showConfigSection();
+                    fetchConfig();
+                    showMessage('登录成功！', 'success');
+                    location.reload();
+                } else {
+                    showMessage('用户名或密码错误！', 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('登录验证失败: ' + error.message, 'error');
+            });
+        }
+
+        function handleLogout() {
+            // 清除token
+            localStorage.removeItem('token');
+            // 清除cookie
+            document.cookie = "isLoggedIn=false; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            showLoginSection();
+            showMessage('已退出登录', 'success');
+        }
+
+        function fetchConfig() {
+            fetch('/config',{
+                method: 'GET', // 默认为 GET，可根据需要修改
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // 添加 token 到请求头
+                    'Content-Type': 'application/json' // 根据需要添加其他头信息
+                }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // 填充表单数据
+                    populateForm(data);
+                })
+                .catch(error => {
+                    showMessage('获取配置失败: ' + error.message, 'error');
+                });
+        }
+
+        function populateForm(data) {
+            // 基础配置
+            document.getElementById('port').value = data.port || 5000;
+            document.getElementById('web_user').value = data.web_user || '';
+            document.getElementById('web_password').value = data.web_password || '';
+
+            // 邮件配置
+            document.getElementById('email_status').value = data.email.status ? 'true' : 'false';
+            document.getElementById('email_receiver').value = data.email.receiver || '';
+            document.getElementById('email_user').value = data.email.user || '';
+            document.getElementById('email_password').value = data.email.password || '';
+            document.getElementById('email_sender').value = data.email.sender || '';
+            document.getElementById('email_title').value = data.email.message.title || '';
+            document.getElementById('email_summary').value = data.email.message.summary || '';
+            document.getElementById('email_content').value = data.email.message.content || '';
+
+            // NotifyX配置
+            document.getElementById('notifyx_status').value = data.notifyX.status ? 'true' : 'false';
+            document.getElementById('notifyx_key').value = data.notifyX.key || '';
+            document.getElementById('notifyx_title').value = data.notifyX.message.title || '';
+            document.getElementById('notifyx_description').value = data.notifyX.message.description || '';
+            document.getElementById('notifyx_content').value = data.notifyX.message.content || '';
+
+            // DeepSeek配置
+            document.getElementById('deepseek_status').value = data.deepseek.status ? 'true' : 'false';
+            document.getElementById('deepseek_base_url').value = data.deepseek.base_url || '';
+            document.getElementById('deepseek_api_key').value = data.deepseek.api_key || '';
+            document.getElementById('deepseek_model').value = data.deepseek.model || '';
+
+            // Gemini配置
+            document.getElementById('gemini_status').value = data.gemini.status ? 'true' : 'false';
+            document.getElementById('gemini_base_url').value = data.gemini.base_url || '';
+            document.getElementById('gemini_api_key').value = data.gemini.api_key || '';
+            document.getElementById('gemini_model').value = data.gemini.model || '';
+
+            // Baidu配置
+            document.getElementById('baidu_status').value = data.baidu.status ? 'true' : 'false';
+            document.getElementById('baidu_base_url').value = data.baidu.base_url || '';
+            document.getElementById('baidu_api_key').value = data.baidu.api_key || '';
+            document.getElementById('baidu_model').value = data.baidu.model || '';
+
+            // VoceChat配置
+            document.getElementById('vocechat_bot_api_key').value = data.vocechat.bot_api_key || '';
+            document.getElementById('vocechat_bot_user_id').value = data.vocechat.bot_user_id || '';
+            document.getElementById('vocechat_host').value = data.vocechat.host || '';
+            document.getElementById('vocechat_target_gid').value = data.vocechat.target_gid || '';
+
+            // 定时任务配置
+            if (data.schedulers && Array.isArray(data.schedulers)) {
+                data.schedulers.forEach((scheduler, index) => {
+                    addSchedulerSection(scheduler, index);
+                });
+            }
+        }
+
+        function addSchedulerSection(schedulerData = null, index = null) {
+            const sectionsContainer = document.getElementById('scheduler-sections');
+            const section = document.createElement('div');
+            section.className = 'section';
+            section.innerHTML = `
+                <h3>定时任务 ${index !== null ? (index + 1) : ''}</h3>
+                <div class="form-group">
+                    <label for="scheduler_cron_${index}">Cron表达式</label>
+                    <input type="text" id="scheduler_cron_${index}" name="scheduler_cron_${index}" ${schedulerData ? 'value="' + schedulerData.cron + '"' : ''}>
+                </div>
+                <div class="form-group">
+                    <label for="scheduler_prompt_${index}">提示词</label>
+                    <input type="text" id="scheduler_prompt_${index}" name="scheduler_prompt_${index}" ${schedulerData ? 'value="' + schedulerData.prompt + '"' : ''}>
+                </div>
+                <div class="form-group">
+                    <label for="scheduler_status_${index}">状态</label>
+                    <select id="scheduler_status_${index}" name="scheduler_status_${index}">
+                        <option value="true" ${schedulerData && schedulerData.status === true ? 'selected' : ''}>启用</option>
+                        <option value="false" ${schedulerData && schedulerData.status === false ? 'selected' : ''}>禁用</option>
+                    </select>
+                </div>
+                <button type="button" onclick="removeSchedulerSection(this)">删除任务</button>
+            `;
+            sectionsContainer.appendChild(section);
+        }
+
+        function removeSchedulerSection(button) {
+            const section = button.parentElement;
+            section.remove();
+        }
+
+        document.getElementById('configForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 收集表单数据
+            const formData = new FormData(this);
+            const configData = {};
+            
+            // 基础配置
+            configData.port = formData.get('port');
+            configData.web_user = formData.get('web_user');
+            configData.web_password = formData.get('web_password');
+            
+            // 邮件配置
+            configData.email = {
+                status: formData.get('email_status') === 'true',
+                receiver: formData.get('email_receiver'),
+                user: formData.get('email_user'),
+                password: formData.get('email_password'),
+                sender: formData.get('email_sender'),
+                message: {
+                    title: formData.get('email_title'),
+                    summary: formData.get('email_summary'),
+                    content: formData.get('email_content')
+                }
+            };
+            
+            // NotifyX配置
+            configData.notifyX = {
+                status: formData.get('notifyx_status') === 'true',
+                key: formData.get('notifyx_key'),
+                message: {
+                    title: formData.get('notifyx_title'),
+                    description: formData.get('notifyx_description'),
+                    content: formData.get('notifyx_content')
+                }
+            };
+            
+            // DeepSeek配置
+            configData.deepseek = {
+                status: formData.get('deepseek_status') === 'true',
+                base_url: formData.get('deepseek_base_url'),
+                api_key: formData.get('deepseek_api_key'),
+                model: formData.get('deepseek_model')
+            };
+            
+            // Gemini配置
+            configData.gemini = {
+                status: formData.get('gemini_status') === 'true',
+                base_url: formData.get('gemini_base_url'),
+                api_key: formData.get('gemini_api_key'),
+                model: formData.get('gemini_model')
+            };
+            
+            // Baidu配置
+            configData.baidu = {
+                status: formData.get('baidu_status') === 'true',
+                base_url: formData.get('baidu_base_url'),
+                api_key: formData.get('baidu_api_key'),
+                model: formData.get('baidu_model')
+            };
+            
+            // VoceChat配置
+            configData.vocechat = {
+                bot_api_key: formData.get('vocechat_bot_api_key'),
+                bot_user_id: parseInt(formData.get('vocechat_bot_user_id')),
+                host: formData.get('vocechat_host'),
+                target_gid: parseInt(formData.get('vocechat_target_gid'))
+            };
+            
+            // 定时任务配置
+            configData.schedulers = [];
+            const schedulerSections = document.querySelectorAll('#scheduler-sections .section');
+            console.log(schedulerSections)
+            schedulerSections.forEach((section, index) => {
+                
+                const cronElement = section.querySelector(`[name="scheduler_cron_${index}"]`);
+                const promptElement = section.querySelector(`[name="scheduler_prompt_${index}"]`);
+                const statusElement = section.querySelector(`[name="scheduler_status_${index}"]`);
+                
+                if (cronElement && promptElement && statusElement) {
+                    const cron = cronElement.value;
+                    const prompt = promptElement.value;
+                    const status = statusElement.value === 'true';
+                    
+                    if (cron || prompt) {
+                        configData.schedulers.push({
+                            cron: cron,
+                            prompt: prompt,
+                            status: status
+                        });
+                    }
+                }
+            });
+            
+            // 发送配置数据到服务器
+            fetch('/config', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // 添加 token 到请求头
+                    'Content-Type': 'application/json' // 根据需要添加其他头信息
+                },
+                body: JSON.stringify(configData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage('配置保存成功！', 'success');
+                } else {
+                    showMessage('配置保存失败: ' + data.error, 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('保存配置时出错: ' + error.message, 'error');
+            });
+        });
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.className = type + '-message';
+            
+           
+            // 3秒后清除消息
+            setTimeout(() => {
+                messageDiv.textContent = '';
+                messageDiv.className = '';
+            }, 3000);
+             alert(message);
+        }
+    </script>
+</body>
+</html>

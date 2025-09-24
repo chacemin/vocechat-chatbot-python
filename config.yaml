@@ -1,0 +1,97 @@
+#端口
+port: '5000'
+# web管理页面配置
+web_user: chace
+web_password: '123456'
+# 认证密钥  请随机自己再生成一个
+auth_secret_key: 3ed5832f-d8e4-4e18-829a-e3efdfe99802
+
+# 邮件配置信息
+email:
+# 状态(true 发送 false 不发送) #目前只支持163邮箱
+  status: false
+  # 发送邮件的邮箱地址
+  receiver: xxxx@qq.com
+  # 发送邮件的邮箱地址
+  user: xxxxx@163.com
+  # 邮箱授权密码（非登录密码，通常为第三方登录授权码）
+  password: your_pwd
+  # 邮件发出者名称（显示在收件方的发件人信息中）
+  sender: AI通知助手
+ # 发送消息的具体内容
+  message:
+    # 邮件标题
+    title: AI计划任务
+    # 邮件简介（可用于摘要展示或预览）
+    summary: ''
+    # 邮件正文内容
+    content: |
+      您好！
+
+# 邮件配置信息
+notifyX:
+# 状态(true 发送 false 不发送)
+  status: false
+  # API KEY
+  key: your_key
+# 发送消息的具体内容
+  message:
+    # 邮件标题
+    title: AI计划任务
+    # 邮件简介（可用于摘要展示或预览）
+    description: 无
+    # 邮件正文内容
+    content: |
+      您好！ 
+deepseek:
+  status: false
+  #基础连接地址
+  base_url: https://api.deepseek.com
+  # apikey
+  api_key: your_key
+  # 模型
+  model: deepseek-chat
+
+gemini:
+  status: true
+  #基础连接地址
+  base_url: https://generativelanguage.googleapis.com
+  # apikey
+  api_key: your_key
+  # 模型
+  model: gemini-2.0-flash
+
+baidu:
+  status: true
+  #基础连接地址
+  base_url: https://qianfan.baidubce.com/v2/ai_search
+  # apikey
+  api_key: your_key
+  # 模型
+  model: ernie-3.5-8k
+  
+# vocechat配置信息
+vocechat:
+# 你的机器人apikey
+  bot_api_key: your_key
+  # 你的机器人用户ID
+  bot_user_id: 9
+  # vocechat域名地址
+  host: http://192.168.0.100:5000
+  # 频道地址
+  target_gid: 3
+  # 设置接收数据密码,暂时不用
+  secret: "rK1nB0xT1pZ0eC7p"
+#AI计划任务
+schedulers:
+    # 添加定时任务，使用crontab格式
+    # 格式说明：分 时 日 月 周
+    # 例如：'0 8 * * *' 表示每天早上8点执行
+    #      '0 */2 * * *' 表示每2小时执行一次
+    #      '30 12 * * 1' 表示每周一中午12:30执行
+- cron: '*/2 * * * *'
+  prompt: 查询一下今天最有价值的20条新闻
+  status: false
+- cron: '*/2 * * * *'
+  prompt: 查询一下今天最有价值的20条新闻,每个分类五条，分别是 国内，国外，科技，股市 ，简短一点不要超过500字
+  status: false
